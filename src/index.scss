@@ -9,7 +9,11 @@ body,
 #root {
   height: 100%;
 }
-
+:root:root {
+  --adm-color-primary: #fc6627;
+  --adm-font-family: 'PingFangSC-Regular';
+  --font-size: 16px;
+}
 p,
 h2,
 h3 {
