@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@/store/index'
 import { asyncLoginAction } from '@/store/actions/login'
 import { useNavigate } from 'react-router-dom'
+import { AxiosError } from 'axios'
 
 const Login = () => {
   const dis = useDispatch<AppDispatch>()
@@ -18,7 +19,13 @@ const Login = () => {
         content: '登录成功',
       })
       usn('/')
-    } catch (error) {}
+    } catch (error) {
+      const _err = error as AxiosError<{ message: string }>
+      Toast.show({
+        icon: 'fail',
+        content: _err.response?.data.message,
+      })
+    }
   }
   return (
     <div className={styles.root}>
