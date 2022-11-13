@@ -1,6 +1,7 @@
-import { Token } from '@/types/data'
+import { Token, LoginFormTy } from '@/types/data'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from '../index'
+import request from '@/utils/request'
 // state变量类型
 export interface loginState {
   token: Token
@@ -30,13 +31,3 @@ export const login = createSlice({
 export default login.reducer
 // 导出action函数
 export const { changeToken } = login.actions
-// 3.异步action
-export function asyncAction(payload?: unknown): AppThunk {
-  return async (dispatch, getState) => {
-    // 1. 发请求获取token
-    // 写法1：说明❓：request.post<指定的是后台返回data类型>
-    // const res = await request.post<Token>('/authorizations', formData)
-    // 写法2：res:类型注解
-    dispatch(changeToken({ token: '12', refresh_token: '456' }))
-  }
-}

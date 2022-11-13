@@ -1,12 +1,24 @@
-import { Button, NavBar, Form, Input } from 'antd-mobile'
+import { Button, NavBar, Form, Input, Toast } from 'antd-mobile'
 import styles from './index.module.scss'
-interface loginForm {
-  mobile: string
-  code: string
-}
+import { LoginFormTy } from '@/types/data'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@/store/index'
+import { asyncLoginAction } from '@/store/actions/login'
+import { useNavigate } from 'react-router-dom'
+
 const Login = () => {
-  const onFinish = (values: loginForm) => {
-    console.log('values', values)
+  const dis = useDispatch<AppDispatch>()
+  const usn = useNavigate()
+  const onFinish = async (loginForm: LoginFormTy) => {
+    console.log('loginForm', loginForm)
+    try {
+      await dis(asyncLoginAction(loginForm))
+      Toast.show({
+        icon: 'success',
+        content: '登录成功',
+      })
+      usn('/')
+    } catch (error) {}
   }
   return (
     <div className={styles.root}>
@@ -31,7 +43,13 @@ const Login = () => {
           <Form.Item
             className="login-item"
             name="code"
-            rules={[{ required: true, message: '请输入验证码' }]}
+            rules={[
+              { required: true, message: '请输入验证码' },
+              {
+                len: 6,
+                message: '验证码为6位',
+              },
+            ]}
             extra={<span className="code-extra">发送验证码</span>}>
             <Input placeholder="请输入验证码" autoComplete="off" />
           </Form.Item>
