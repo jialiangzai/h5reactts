@@ -6,12 +6,14 @@ import { AppDispatch } from '@/store/index'
 import { asyncLoginAction } from '@/store/actions/login'
 import { useNavigate } from 'react-router-dom'
 import { AxiosError } from 'axios'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { InputRef } from 'antd-mobile/es/components/input'
 import { onGetCode } from '@/api/login'
 const Login = () => {
   const dis = useDispatch<AppDispatch>()
   const usn = useNavigate()
+  const [timeLeft, setTimeLeft] = useState(0)
+  const timerId = useRef(0)
   const mobileRef = useRef<InputRef>(null)
   const [form] = Form.useForm()
   const sendCode = async () => {
@@ -27,6 +29,12 @@ const Login = () => {
         icon: 'success',
         content: '发送成功',
       })
+      // 倒计时
+      setTimeLeft(60)
+      // window解决定时器的类型
+      timerId.current = window.setInterval(() => {
+        setTimeLeft((timeLeft) => timeLeft - 1)
+      }, 1000)
     } catch (error) {}
   }
   const onFinish = async (loginForm: LoginFormTy) => {
@@ -46,6 +54,18 @@ const Login = () => {
       })
     }
   }
+  // 清理定时器 组件销毁 或秒变成0
+  useEffect(() => {
+    if (timeLeft === 0) {
+      window.clearInterval(timerId.current)
+    }
+  }, [timeLeft])
+  useEffect(() => {
+    return () => {
+      window.clearInterval(timerId.current)
+    }
+  }, [])
+
   return (
     <div className={styles.root}>
       <div className="login-form">
@@ -77,8 +97,10 @@ const Login = () => {
               },
             ]}
             extra={
-              <span className="code-extra" onClick={sendCode}>
-                发送验证码
+              <span
+                className="code-extra"
+                onClick={timeLeft === 0 ? sendCode : undefined}>
+                {timeLeft === 0 ? '发送验证码' : `${timeLeft}s后重新获取`}
               </span>
             }>
             <Input placeholder="请输入验证码" autoComplete="off" />
