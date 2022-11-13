@@ -10,6 +10,7 @@ import { AxiosError } from 'axios'
 const Login = () => {
   const dis = useDispatch<AppDispatch>()
   const usn = useNavigate()
+  const [form] = Form.useForm()
   const onFinish = async (loginForm: LoginFormTy) => {
     console.log('loginForm', loginForm)
     try {
@@ -32,7 +33,7 @@ const Login = () => {
       <div className="login-form">
         <h2 className="title">账号登录</h2>
 
-        <Form onFinish={onFinish}>
+        <Form onFinish={onFinish} form={form}>
           <Form.Item
             className="login-item"
             name="mobile"
@@ -62,14 +63,27 @@ const Login = () => {
           </Form.Item>
 
           {/* noStyle 表示不提供 Form.Item 自带的样式 */}
-          <Form.Item noStyle>
-            <Button
-              block
-              type="submit"
-              color="primary"
-              className="login-submit">
-              登 录
-            </Button>
+          <Form.Item noStyle shouldUpdate>
+            {() => {
+              // isFieldsTouched(true) 检查是否所有字段都被操作过
+              const untouched = !form.isFieldsTouched(true)
+              // getFieldsError() 获取所有字段名对应的错误信息
+              const hasError =
+                form.getFieldsError().filter(({ errors }) => errors.length)
+                  .length !== 0
+              const disabled = untouched || hasError
+
+              return (
+                <Button
+                  block
+                  type="submit"
+                  color="primary"
+                  className="login-submit"
+                  disabled={disabled}>
+                  提交
+                </Button>
+              )
+            }}
           </Form.Item>
         </Form>
       </div>
