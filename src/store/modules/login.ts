@@ -2,6 +2,7 @@ import { Token, LoginFormTy } from '@/types/data'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from '../index'
 import request from '@/utils/request'
+import { getToken, setToken } from '@/utils/token'
 // state变量类型
 export interface loginState {
   token: Token
@@ -11,7 +12,7 @@ export const login = createSlice({
   name: 'login',
   // 1. 定义变量(状态数据)
   initialState: {
-    token: {
+    token: getToken() || {
       token: '', // 用户token令牌
       refresh_token: '', // 用于刷新token的令牌
     },
@@ -21,6 +22,7 @@ export const login = createSlice({
     // action函数(同步)
     changeToken(state, action: PayloadAction<Token>) {
       state.token = action.payload
+      setToken(action.payload)
     },
     // delTokenRd (state) {
     //   state.token = ''
