@@ -6,11 +6,29 @@ import { AppDispatch } from '@/store/index'
 import { asyncLoginAction } from '@/store/actions/login'
 import { useNavigate } from 'react-router-dom'
 import { AxiosError } from 'axios'
-
+import { useRef } from 'react'
+import { InputRef } from 'antd-mobile/es/components/input'
+import { onGetCode } from '@/api/login'
 const Login = () => {
   const dis = useDispatch<AppDispatch>()
   const usn = useNavigate()
+  const mobileRef = useRef<InputRef>(null)
   const [form] = Form.useForm()
+  const sendCode = async () => {
+    const mobile = form.getFieldValue('mobile') || ''
+    const iseor = form.getFieldError('mobile').length > 0
+    if (!mobile.trim() || iseor) {
+      return mobileRef.current!.focus()
+    }
+    // 发送验证码请求
+    try {
+      await onGetCode(mobile)
+      Toast.show({
+        icon: 'success',
+        content: '发送成功',
+      })
+    } catch (error) {}
+  }
   const onFinish = async (loginForm: LoginFormTy) => {
     console.log('loginForm', loginForm)
     try {
@@ -45,7 +63,7 @@ const Login = () => {
                 message: '请输入正确的11位手机号',
               },
             ]}>
-            <Input placeholder="请输入手机号" />
+            <Input placeholder="请输入手机号" maxLength={11} ref={mobileRef} />
           </Form.Item>
 
           <Form.Item
@@ -58,7 +76,11 @@ const Login = () => {
                 message: '验证码为6位',
               },
             ]}
-            extra={<span className="code-extra">发送验证码</span>}>
+            extra={
+              <span className="code-extra" onClick={sendCode}>
+                发送验证码
+              </span>
+            }>
             <Input placeholder="请输入验证码" autoComplete="off" />
           </Form.Item>
 
