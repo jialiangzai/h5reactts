@@ -1,9 +1,8 @@
-import { Route } from 'react-router-dom'
+import { Route, useLocation, useNavigate } from 'react-router-dom'
 import { TabBar } from 'antd-mobile'
 import styles from './index.module.scss'
 import Icon from '@/components/Icon'
 import { Outlet } from 'react-router-dom'
-
 // 菜单数据
 const tabs = [
   { path: '/', icon: 'iconbtn_home', text: '首页' },
@@ -13,12 +12,22 @@ const tabs = [
 ]
 
 const Layout = () => {
+  const location = useLocation()
+  const navg = useNavigate()
+  const onChange = (key: string) => {
+    // console.log(key)
+    // 跳转
+    navg(key)
+  }
   return (
     <div className={styles.root}>
       {/* 子路由挂载点 */}
       <Outlet />
 
-      <TabBar className="tab-bar">
+      <TabBar
+        className="tab-bar"
+        onChange={onChange}
+        activeKey={location.pathname}>
         {tabs.map((item) => (
           <TabBar.Item
             key={item.path}
