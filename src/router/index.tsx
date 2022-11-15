@@ -7,6 +7,7 @@ import Home from '@/pages/home'
 import Question from '@/pages/question'
 import Video from '@/pages/video'
 import Profile from '@/pages/profile'
+import ProfileEdit from '@/pages/profile/Edit'
 const routes = [
   {
     path: '/',
@@ -29,6 +30,10 @@ const routes = [
         element: <Profile />,
       },
     ],
+  },
+  {
+    path: '/profile/edit',
+    element: <ProfileEdit />,
   },
   {
     path: '/login',
