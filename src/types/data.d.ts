@@ -1,3 +1,9 @@
+// 封装返回的类型
+export type ApiRes<Data> = {
+  data: Data
+  message: string
+}
+
 // 登录接口返回数据类型
 export type Token = {
   token: string
@@ -23,3 +29,5 @@ export type User = {
   fans_count: number
   like_count: number
 }
+// 个人信息返回类型
+export type UserRes = ApiRes<User>
