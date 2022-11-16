@@ -1,5 +1,10 @@
+import { AppDispatch, RootState } from '@/store'
+import { getUserProfile } from '@/store/actions/profile'
 import { Button, List, DatePicker, NavBar } from 'antd-mobile'
 import classNames from 'classnames'
+import { stat } from 'fs'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import styles from './index.module.scss'
@@ -8,6 +13,13 @@ const Item = List.Item
 
 const ProfileEdit = () => {
   const navg = useNavigate()
+  const dis = useDispatch<AppDispatch>()
+  useEffect(() => {
+    dis(getUserProfile())
+  }, [dis])
+  const {
+    editUser: { photo, name, intro, gender, birthday },
+  } = useSelector((state: RootState) => state.profile)
   return (
     <div className={styles.root}>
       <div className="content">
@@ -27,25 +39,20 @@ const ProfileEdit = () => {
             <Item
               extra={
                 <span className="avatar-wrapper">
-                  <img
-                    width={24}
-                    height={24}
-                    src={'http://toutiao.itheima.net/images/user_head.jpg'}
-                    alt=""
-                  />
+                  <img width={24} height={24} src={photo} alt="" />
                 </span>
               }
               arrow>
               头像
             </Item>
-            <Item arrow extra={'黑马先锋'}>
+            <Item arrow extra={name}>
               昵称
             </Item>
             <Item
               arrow
               extra={
-                <span className={classNames('intro', 'normal')}>
-                  {'未填写'}
+                <span className={classNames('intro', intro && 'normal')}>
+                  {intro || '未填写'}
                 </span>
               }>
               简介
@@ -53,10 +60,10 @@ const ProfileEdit = () => {
           </List>
 
           <List className="profile-list">
-            <Item arrow extra={'男'}>
+            <Item arrow extra={gender === 0 ? '男' : '女'}>
               性别
             </Item>
-            <Item arrow extra={'1999-9-9'}>
+            <Item arrow extra={birthday}>
               生日
             </Item>
           </List>

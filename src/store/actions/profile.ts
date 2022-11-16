@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-import { User } from '@/types/data'
+import { User, UserProfileResponse } from '@/types/data'
 import { AppThunk } from '@/store'
-import { setUser } from '../modules/profile'
+import { setUser, setEditUser } from '../modules/profile'
 type UserResponse = {
   data: User
   message: string
@@ -14,5 +14,14 @@ export function getUser(): AppThunk {
     const { data, message } = res
     console.log(res)
     dispatch(setUser(data))
+  }
+}
+// 我的页面 - 获取个人信息
+export function getUserProfile(): AppThunk {
+  return async (dispatch) => {
+    const res: UserProfileResponse = await request.get('/user/profile')
+    const { data, message } = res
+    console.log(res)
+    dispatch(setEditUser(data))
   }
 }

@@ -31,3 +31,13 @@ export type User = {
 }
 // 个人信息返回类型
 export type UserRes = ApiRes<User>
+export type UserProfile = {
+  id: string
+  photo: string
+  name: string
+  mobile: string
+  gender: number
+  birthday: string
+  intro: string
+}
+export type UserProfileResponse = ApiRes<UserProfile>

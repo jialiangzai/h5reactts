@@ -1,9 +1,10 @@
 import { AppThunk } from '../index'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '@/types/data'
+import { User, UserProfile } from '@/types/data'
 // state变量类型
 export interface profileState {
   user: User
+  editUser: UserProfile
 }
 export const profile = createSlice({
   // 命名空间，在调用action的时候会默认的设置为action命令的前缀,避免冲突
@@ -11,6 +12,7 @@ export const profile = createSlice({
   // 1. 定义变量(状态数据)
   initialState: {
     user: {},
+    editUser: {},
   } as profileState,
   // 2. 定义reducers更新变量(其中函数属性名作为action，在组件中可以dispatch触发reducer函数更新状态)
   reducers: {
@@ -18,15 +20,16 @@ export const profile = createSlice({
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload
     },
-    // delTokenRd (state) {
-    //   state.token = ''
-    // }
+    // 获取个人资料与上面获取个人信息不同
+    setEditUser(state, action: PayloadAction<UserProfile>) {
+      state.editUser = action.payload
+    },
   },
 })
 // 导出reducer(创建store使用)
 export default profile.reducer
 // 导出action函数
-export const { setUser } = profile.actions
+export const { setUser, setEditUser } = profile.actions
 // 3.异步action
 // export function asyncAction(payload?: unknown): AppThunk {
 //   return async (dispatch, getState) => {
