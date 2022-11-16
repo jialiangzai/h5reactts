@@ -50,9 +50,9 @@ request.interceptors.response.use(
       // 携带参数
       // 在入口index.js 中导入 history 对象，并设置为 Router 的 history
       // 通过响应拦截器处理 token 失效
-      history.replace('/login', {
-        redirectUrl: history.location.pathname,
-      })
+      // history.replace('/login', {
+      //   redirectUrl: history.location.pathname,
+      // })
     }
     return Promise.reject(error)
   }

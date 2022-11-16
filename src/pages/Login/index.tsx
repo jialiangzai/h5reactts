@@ -4,7 +4,7 @@ import { LoginFormTy } from '@/types/data'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@/store/index'
 import { asyncLoginAction } from '@/store/actions/login'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { useRef, useState, useEffect } from 'react'
 import { InputRef } from 'antd-mobile/es/components/input'
@@ -12,6 +12,8 @@ import { onGetCode } from '@/api/login'
 const Login = () => {
   const dis = useDispatch<AppDispatch>()
   const usn = useNavigate()
+  // 老版本支持泛型新版本还要断言一下
+  const loc = useLocation() as { state: { from: string } }
   const [timeLeft, setTimeLeft] = useState(0)
   const timerId = useRef(0)
   const mobileRef = useRef<InputRef>(null)
@@ -45,7 +47,8 @@ const Login = () => {
         icon: 'success',
         content: '登录成功',
       })
-      usn('/')
+      // 登录记忆
+      usn(loc.state?.from || '/')
     } catch (error) {
       const _err = error as AxiosError<{ message: string }>
       Toast.show({
