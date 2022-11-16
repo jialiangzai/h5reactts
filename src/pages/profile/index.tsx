@@ -1,20 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Icon from '@/components/Icon'
 import styles from './index.module.scss'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@/store'
-import { useEffect } from 'react'
 import { getUser } from '@/store/actions/profile'
 import { useInitState } from '@/hooks/use-initial-state'
 const Profile = () => {
   const history = useNavigate()
-  // const dis = useDispatch<AppDispatch>()
-  // const {
-  //   user: { photo, name, like_count, follow_count, fans_count, art_count },
-  // } = useSelector((state: RootState) => state.profile)
-  // useEffect(() => {
-  //   dis(getUser())
-  // }, [dis])
   const {
     user: { photo, name, like_count, follow_count, fans_count, art_count },
   } = useInitState(getUser, 'profile')
@@ -98,6 +88,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
     </div>
   )
 }

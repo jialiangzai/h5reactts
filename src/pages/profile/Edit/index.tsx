@@ -1,17 +1,23 @@
 import { AppDispatch, RootState } from '@/store'
 import { getUserProfile } from '@/store/actions/profile'
-import { Button, List, DatePicker, NavBar } from 'antd-mobile'
+import { Button, List, DatePicker, NavBar, Popup } from 'antd-mobile'
 import classNames from 'classnames'
 import { stat } from 'fs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import styles from './index.module.scss'
+import EditInput from '../EditInput'
 
 const Item = List.Item
 
 const ProfileEdit = () => {
+  const [inputVisible, setinputVisible] = useState(false)
+
+  const onInputShow = () => {
+    setinputVisible(true)
+  }
   const navg = useNavigate()
   const dis = useDispatch<AppDispatch>()
   useEffect(() => {
@@ -20,6 +26,9 @@ const ProfileEdit = () => {
   const {
     editUser: { photo, name, intro, gender, birthday },
   } = useSelector((state: RootState) => state.profile)
+  const onInputHide = () => {
+    setinputVisible(false)
+  }
   return (
     <div className={styles.root}>
       <div className="content">
@@ -45,7 +54,7 @@ const ProfileEdit = () => {
               arrow>
               头像
             </Item>
-            <Item arrow extra={name}>
+            <Item arrow extra={name} onClick={onInputShow}>
               昵称
             </Item>
             <Item
@@ -81,6 +90,9 @@ const ProfileEdit = () => {
           <Button className="btn">退出登录</Button>
         </div>
       </div>
+      <Popup visible={inputVisible} position="right">
+        <EditInput onClose={onInputHide} value={name} />
+      </Popup>
     </div>
   )
 }
