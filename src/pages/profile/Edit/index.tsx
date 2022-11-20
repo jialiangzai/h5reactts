@@ -10,12 +10,29 @@ import styles from './index.module.scss'
 import EditInput from '../EditInput'
 
 const Item = List.Item
-
+type InputPopup = {
+  type: '' | 'name' | 'intro'
+  value: string
+  visible: boolean
+}
 const ProfileEdit = () => {
-  const [inputVisible, setinputVisible] = useState(false)
+  // const [inputVisible, setinputVisible] = useState(false)
+  // 现在：
+  const [inputVisible, setinputVisible] = useState<InputPopup>({
+    // type 属性：用于告诉 EditInput 组件，当前修改的是昵称还是简介
+    type: '', // 'name' or 'intro'
+    // 当前值
+    value: '',
+    // 展示或隐藏状态
+    visible: false,
+  })
 
   const onInputShow = () => {
-    setinputVisible(true)
+    setinputVisible({
+      type: 'name',
+      value: name,
+      visible: true,
+    })
   }
   const navg = useNavigate()
   const dis = useDispatch<AppDispatch>()
@@ -24,11 +41,14 @@ const ProfileEdit = () => {
     editUser: { photo, name, intro, gender, birthday },
   } = useSelector((state: RootState) => state.profile)
   const onInputHide = () => {
-    setinputVisible(false)
+    setinputVisible({
+      type: '',
+      value: '',
+      visible: false,
+    })
   }
-  const onUpdateName = async (value: string) => {
+  const onUpdateName = async (type: string, value: string) => {
     console.log('父组件拿到修改后的昵称：', value)
-
     try {
       await dis(updateUserProfile({ name: value }))
       Toast.show({
@@ -39,6 +59,14 @@ const ProfileEdit = () => {
       onInputHide()
     } catch (error) {}
   }
+  const onIntroShow = () => {
+    setinputVisible({
+      type: 'intro',
+      value: intro,
+      visible: true,
+    })
+  }
+
   useEffect(() => {
     dis(getUserProfile())
   }, [dis])
@@ -76,7 +104,8 @@ const ProfileEdit = () => {
                 <span className={classNames('intro', intro && 'normal')}>
                   {intro || '未填写'}
                 </span>
-              }>
+              }
+              onClick={onIntroShow}>
               简介
             </Item>
           </List>
@@ -103,10 +132,12 @@ const ProfileEdit = () => {
           <Button className="btn">退出登录</Button>
         </div>
       </div>
-      <Popup visible={inputVisible} position="right">
+      <Popup visible={inputVisible.visible} position="right" destroyOnClose>
         <EditInput
+          key={inputVisible.type}
+          type={inputVisible.type}
           onClose={onInputHide}
-          value={name}
+          value={inputVisible.value}
           onUpdateName={onUpdateName}
         />
       </Popup>
