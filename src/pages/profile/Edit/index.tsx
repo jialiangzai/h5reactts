@@ -86,6 +86,15 @@ const ProfileEdit = () => {
     })
     onGenderHide()
   }
+
+  const [showBirthday, setShowBirthday] = useState(false)
+
+  const onBirthdayShow = () => {
+    setShowBirthday(true)
+  }
+  const onBirthdayHide = () => {
+    setShowBirthday(false)
+  }
   const onUpdateName = async (type: string, value: string | number) => {
     console.log('父组件拿到修改后的昵称：', value)
     try {
@@ -167,17 +176,17 @@ const ProfileEdit = () => {
               onClick={onGenderShow}>
               性别
             </Item>
-            <Item arrow extra={birthday}>
+            <Item arrow extra={birthday} onClick={onBirthdayShow}>
               生日
             </Item>
           </List>
 
           <DatePicker
-            visible={false}
-            value={new Date()}
+            visible={showBirthday}
+            value={new Date(birthday)}
+            onCancel={onBirthdayHide}
             title="选择年月日"
             min={new Date(1900, 0, 1, 0, 0, 0)}
-            max={new Date()}
           />
         </div>
 
