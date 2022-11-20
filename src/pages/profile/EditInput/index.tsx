@@ -4,15 +4,20 @@ import styles from './index.module.scss'
 type Props = {
   onClose: () => void
   value: string
+  onUpdateName: (val: string) => void
 }
-const EditInput = ({ onClose, value }: Props) => {
+const EditInput = ({ onClose, value, onUpdateName }: Props) => {
   const [inputValue, setInputValue] = useState(value)
   return (
     <div className={styles.root}>
       <NavBar
         onBack={onClose}
         className="navbar"
-        right={<span className="commit-btn">提交</span>}>
+        right={
+          <span className="commit-btn" onClick={() => onUpdateName(inputValue)}>
+            提交
+          </span>
+        }>
         编辑昵称
       </NavBar>
 
@@ -20,6 +25,7 @@ const EditInput = ({ onClose, value }: Props) => {
         <h3>昵称</h3>
 
         <div className="input-wrap">
+          {/* onChange={setInputValue}传入修改函数 */}
           <Input
             placeholder="请输入"
             value={inputValue}

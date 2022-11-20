@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from '@/store'
-import { getUserProfile } from '@/store/actions/profile'
+import { getUserProfile, updateUserProfile } from '@/store/actions/profile'
 import { Button, List, DatePicker, NavBar, Popup } from 'antd-mobile'
 import classNames from 'classnames'
 import { stat } from 'fs'
@@ -20,15 +20,24 @@ const ProfileEdit = () => {
   }
   const navg = useNavigate()
   const dis = useDispatch<AppDispatch>()
-  useEffect(() => {
-    dis(getUserProfile())
-  }, [dis])
+
   const {
     editUser: { photo, name, intro, gender, birthday },
   } = useSelector((state: RootState) => state.profile)
   const onInputHide = () => {
     setinputVisible(false)
   }
+  const onUpdateName = async (value: string) => {
+    console.log('父组件拿到修改后的昵称：', value)
+
+    try {
+      await dis(updateUserProfile({ name: value }))
+      onInputHide()
+    } catch (error) {}
+  }
+  useEffect(() => {
+    dis(getUserProfile())
+  }, [dis])
   return (
     <div className={styles.root}>
       <div className="content">
@@ -91,7 +100,11 @@ const ProfileEdit = () => {
         </div>
       </div>
       <Popup visible={inputVisible} position="right">
-        <EditInput onClose={onInputHide} value={name} />
+        <EditInput
+          onClose={onInputHide}
+          value={name}
+          onUpdateName={onUpdateName}
+        />
       </Popup>
     </div>
   )
