@@ -2,7 +2,7 @@ import { AppDispatch, RootState } from '@/store'
 import { getUserProfile, updateUserProfile } from '@/store/actions/profile'
 import { Button, List, DatePicker, NavBar, Popup, Toast } from 'antd-mobile'
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -67,16 +67,22 @@ const ProfileEdit = () => {
       visible: false,
     })
   }
+  const fileRef = useRef<HTMLInputElement>(null)
   const onUpdateName = async (type: string, value: string) => {
     console.log('父组件拿到修改后的昵称：', value)
     try {
-      await dis(updateUserProfile({ [type]: value }))
-      Toast.show({
-        content: '更新成功',
-        duration: 1000,
-      })
-      // 关闭弹出层
-      onInputHide()
+      if (type === 'photo') {
+        fileRef.current?.click()
+      } else {
+        await dis(updateUserProfile({ [type]: value }))
+        Toast.show({
+          content: '更新成功',
+          duration: 1000,
+        })
+        // 关闭弹出层
+        onInputHide()
+        onGenderHide()
+      }
     } catch (error) {}
   }
   const onIntroShow = () => {
@@ -86,7 +92,12 @@ const ProfileEdit = () => {
       visible: true,
     })
   }
-
+  const onPhotoShow = () => {
+    setListPopup({
+      type: 'photo',
+      visible: true,
+    })
+  }
   useEffect(() => {
     dis(getUserProfile())
   }, [dis])
@@ -112,7 +123,8 @@ const ProfileEdit = () => {
                   <img width={24} height={24} src={photo} alt="" />
                 </span>
               }
-              arrow>
+              arrow
+              onClick={onPhotoShow}>
               头像
             </Item>
             <Item arrow extra={name} onClick={onInputShow}>
@@ -133,7 +145,7 @@ const ProfileEdit = () => {
           <List className="profile-list">
             <Item
               arrow
-              extra={gender === 0 ? '男' : '女'}
+              extra={gender == 0 ? '男' : '女'}
               onClick={onGenderShow}>
               性别
             </Item>
@@ -165,8 +177,13 @@ const ProfileEdit = () => {
         />
       </Popup>
       <Popup visible={listPopup.visible} onMaskClick={onGenderHide}>
-        <EditList onClose={onGenderHide} />
+        <EditList
+          onClose={onGenderHide}
+          type={listPopup.type}
+          onUpdateProfile={onUpdateName}
+        />
       </Popup>
+      <input type="file" hidden ref={fileRef} />
     </div>
   )
 }
