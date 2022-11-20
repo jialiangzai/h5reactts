@@ -10,7 +10,7 @@ type Props = {
 }
 
 const EditInput = ({ onClose, value, onUpdateName, type }: Props) => {
-  const [inputValue, setInputValue] = useState(value || '')
+  const [inputValue, setInputValue] = useState(value ?? '')
   const isName = type === 'name'
   // antd-mobile 中的 Popup 组件在隐藏时，不会销毁所渲染的内容，而是隐藏
   // useState` hook 默认值的特点只会在组件第一次渲染时生效

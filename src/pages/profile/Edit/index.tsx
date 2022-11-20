@@ -8,11 +8,15 @@ import { useNavigate } from 'react-router-dom'
 
 import styles from './index.module.scss'
 import EditInput from '../EditInput'
-
+import EditList from '../EditList'
 const Item = List.Item
 type InputPopup = {
   type: '' | 'name' | 'intro'
   value: string
+  visible: boolean
+}
+type ListPopup = {
+  type: '' | 'gender' | 'photo'
   visible: boolean
 }
 const ProfileEdit = () => {
@@ -26,7 +30,23 @@ const ProfileEdit = () => {
     // 展示或隐藏状态
     visible: false,
   })
+  const [listPopup, setListPopup] = useState<ListPopup>({
+    type: '',
+    visible: false,
+  })
 
+  const onGenderShow = () => {
+    setListPopup({
+      type: 'gender',
+      visible: true,
+    })
+  }
+  const onGenderHide = () => {
+    setListPopup({
+      type: '',
+      visible: false,
+    })
+  }
   const onInputShow = () => {
     setinputVisible({
       type: 'name',
@@ -111,7 +131,10 @@ const ProfileEdit = () => {
           </List>
 
           <List className="profile-list">
-            <Item arrow extra={gender === 0 ? '男' : '女'}>
+            <Item
+              arrow
+              extra={gender === 0 ? '男' : '女'}
+              onClick={onGenderShow}>
               性别
             </Item>
             <Item arrow extra={birthday}>
@@ -140,6 +163,9 @@ const ProfileEdit = () => {
           value={inputVisible.value}
           onUpdateName={onUpdateName}
         />
+      </Popup>
+      <Popup visible={listPopup.visible} onMaskClick={onGenderHide}>
+        <EditList onClose={onGenderHide} />
       </Popup>
     </div>
   )
