@@ -50,7 +50,7 @@ const ProfileEdit = () => {
   const onUpdateName = async (type: string, value: string) => {
     console.log('父组件拿到修改后的昵称：', value)
     try {
-      await dis(updateUserProfile({ name: value }))
+      await dis(updateUserProfile({ [type]: value }))
       Toast.show({
         content: '更新成功',
         duration: 1000,
