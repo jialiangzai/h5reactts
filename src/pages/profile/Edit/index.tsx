@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from './index.module.scss'
 import EditInput from '../EditInput'
 import EditList from '../EditList'
+import dayjs from 'dayjs'
 const Item = List.Item
 type InputPopup = {
   type: '' | 'name' | 'intro'
@@ -125,6 +126,12 @@ const ProfileEdit = () => {
       visible: true,
     })
   }
+  const onUpdateBirthday = (value: Date) => {
+    const birthday = dayjs(value).format('YYYY-MM-DD')
+    onUpdateName('birthday', birthday)
+    onBirthdayHide()
+  }
+
   useEffect(() => {
     dis(getUserProfile())
   }, [dis])
@@ -184,6 +191,7 @@ const ProfileEdit = () => {
           <DatePicker
             visible={showBirthday}
             value={new Date(birthday)}
+            onConfirm={onUpdateBirthday}
             onCancel={onBirthdayHide}
             title="选择年月日"
             min={new Date(1900, 0, 1, 0, 0, 0)}
