@@ -1,11 +1,14 @@
 import { AppDispatch, RootState } from '@/store'
-import { getUserProfile, updateUserProfile } from '@/store/actions/profile'
+import {
+  getUserProfile,
+  updatePhoto,
+  updateUserProfile,
+} from '@/store/actions/profile'
 import { Button, List, DatePicker, NavBar, Popup, Toast } from 'antd-mobile'
 import classNames from 'classnames'
 import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import styles from './index.module.scss'
 import EditInput from '../EditInput'
 import EditList from '../EditList'
@@ -69,13 +72,19 @@ const ProfileEdit = () => {
   }
   const fileRef = useRef<HTMLInputElement>(null)
 
-  const onChangePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) {
       return
     }
     const formData = new FormData()
     formData.append('photo', e.target.files[0])
     console.log(formData.get('photo'))
+    await dis(updatePhoto(formData))
+    Toast.show({
+      content: '更新成功',
+      duration: 1000,
+    })
+    onGenderHide()
   }
   const onUpdateName = async (type: string, value: string) => {
     console.log('父组件拿到修改后的昵称：', value)

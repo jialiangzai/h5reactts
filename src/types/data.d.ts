@@ -41,3 +41,7 @@ export type UserProfile = {
   intro: string
 }
 export type UserProfileResponse = ApiRes<UserProfile>
+
+export type UserPhotoResponse = ApiResponse<{
+  photo: string
+}>

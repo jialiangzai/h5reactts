@@ -1,5 +1,10 @@
 import request from '@/utils/request'
-import { User, UserProfileResponse, UserProfile } from '@/types/data'
+import {
+  User,
+  UserProfileResponse,
+  UserProfile,
+  UserPhotoResponse,
+} from '@/types/data'
 import { AppThunk } from '@/store'
 import { setUser, setEditUser, updateEditUser } from '../modules/profile'
 type UserResponse = {
@@ -31,5 +36,13 @@ export function updateUserProfile(UserProfile: Partial<UserProfile>): AppThunk {
     const res = await request.patch('/user/profile', UserProfile)
     // console.log(res)
     dispatch(updateEditUser(UserProfile))
+  }
+}
+// 我的页面 - 获取个人信息
+export function updatePhoto(fm: FormData): AppThunk {
+  return async (dispatch) => {
+    const res: UserPhotoResponse = await request.patch('/user/photo', fm)
+    // console.log(res)
+    dispatch(updateUserProfile({ photo: res.data.photo }))
   }
 }
