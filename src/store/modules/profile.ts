@@ -24,12 +24,18 @@ export const profile = createSlice({
     setEditUser(state, action: PayloadAction<UserProfile>) {
       state.editUser = action.payload
     },
+    updateEditUser(state, action: PayloadAction<Partial<UserProfile>>) {
+      state.editUser = {
+        ...state.editUser,
+        ...action.payload,
+      }
+    },
   },
 })
 // 导出reducer(创建store使用)
 export default profile.reducer
 // 导出action函数
-export const { setUser, setEditUser } = profile.actions
+export const { setUser, setEditUser, updateEditUser } = profile.actions
 // 3.异步action
 // export function asyncAction(payload?: unknown): AppThunk {
 //   return async (dispatch, getState) => {

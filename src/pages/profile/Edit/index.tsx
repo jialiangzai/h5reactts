@@ -1,8 +1,7 @@
 import { AppDispatch, RootState } from '@/store'
 import { getUserProfile, updateUserProfile } from '@/store/actions/profile'
-import { Button, List, DatePicker, NavBar, Popup } from 'antd-mobile'
+import { Button, List, DatePicker, NavBar, Popup, Toast } from 'antd-mobile'
 import classNames from 'classnames'
-import { stat } from 'fs'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -32,6 +31,11 @@ const ProfileEdit = () => {
 
     try {
       await dis(updateUserProfile({ name: value }))
+      Toast.show({
+        content: '更新成功',
+        duration: 1000,
+      })
+      // 关闭弹出层
       onInputHide()
     } catch (error) {}
   }

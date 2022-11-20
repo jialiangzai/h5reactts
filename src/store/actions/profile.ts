@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import { User, UserProfileResponse, UserProfile } from '@/types/data'
 import { AppThunk } from '@/store'
-import { setUser, setEditUser } from '../modules/profile'
+import { setUser, setEditUser, updateEditUser } from '../modules/profile'
 type UserResponse = {
   data: User
   message: string
@@ -29,7 +29,7 @@ export function getUserProfile(): AppThunk {
 export function updateUserProfile(UserProfile: Partial<UserProfile>): AppThunk {
   return async (dispatch) => {
     const res = await request.patch('/user/profile', UserProfile)
-    console.log(res)
-    // dispatch(setEditUser(data))
+    // console.log(res)
+    dispatch(updateEditUser(UserProfile))
   }
 }
