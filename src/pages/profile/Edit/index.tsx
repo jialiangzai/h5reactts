@@ -68,6 +68,15 @@ const ProfileEdit = () => {
     })
   }
   const fileRef = useRef<HTMLInputElement>(null)
+
+  const onChangePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) {
+      return
+    }
+    const formData = new FormData()
+    formData.append('photo', e.target.files[0])
+    console.log(formData.get('photo'))
+  }
   const onUpdateName = async (type: string, value: string) => {
     console.log('父组件拿到修改后的昵称：', value)
     try {
@@ -183,7 +192,7 @@ const ProfileEdit = () => {
           onUpdateProfile={onUpdateName}
         />
       </Popup>
-      <input type="file" hidden ref={fileRef} />
+      <input type="file" hidden ref={fileRef} onChange={onChangePhoto} />
     </div>
   )
 }
