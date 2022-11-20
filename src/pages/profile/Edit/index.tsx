@@ -86,7 +86,7 @@ const ProfileEdit = () => {
     })
     onGenderHide()
   }
-  const onUpdateName = async (type: string, value: string) => {
+  const onUpdateName = async (type: string, value: string | number) => {
     console.log('父组件拿到修改后的昵称：', value)
     try {
       if (type === 'photo') {
@@ -163,7 +163,7 @@ const ProfileEdit = () => {
           <List className="profile-list">
             <Item
               arrow
-              extra={gender == 0 ? '男' : '女'}
+              extra={gender === 0 ? '男' : '女'}
               onClick={onGenderShow}>
               性别
             </Item>
