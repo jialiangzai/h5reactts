@@ -4,7 +4,15 @@ import {
   updatePhoto,
   updateUserProfile,
 } from '@/store/actions/profile'
-import { Button, List, DatePicker, NavBar, Popup, Toast } from 'antd-mobile'
+import {
+  Button,
+  List,
+  DatePicker,
+  NavBar,
+  Popup,
+  Toast,
+  Dialog,
+} from 'antd-mobile'
 import classNames from 'classnames'
 import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,6 +21,7 @@ import styles from './index.module.scss'
 import EditInput from '../EditInput'
 import EditList from '../EditList'
 import dayjs from 'dayjs'
+import { logoutAction } from '@/store/actions/login'
 const Item = List.Item
 type InputPopup = {
   type: '' | 'name' | 'intro'
@@ -132,6 +141,45 @@ const ProfileEdit = () => {
     onBirthdayHide()
   }
 
+  const onLogout = () => {
+    // 写法1
+    // Dialog.confirm({
+    //   title: '提示：确认退出极客园吗？',
+    //   confirmText: '退出',
+    //   onConfirm: () => {
+    //     console.log('退出')
+    //   },
+    // })
+    // 写法2
+    const handler = Dialog.show({
+      title: '温馨提示',
+      content: '亲，你确定退出吗？',
+      actions: [
+        [
+          {
+            key: 'cancel',
+            text: '取消',
+            onClick: () => {
+              handler.close()
+            },
+          },
+          {
+            key: 'confirm',
+            text: '退出',
+            style: {
+              color: 'var(--adm-color-weak)',
+            },
+            onClick: () => {
+              dis(logoutAction())
+              handler.close()
+              navg('/login')
+            },
+          },
+        ],
+      ],
+    })
+  }
+
   useEffect(() => {
     dis(getUserProfile())
   }, [dis])
@@ -199,7 +247,9 @@ const ProfileEdit = () => {
         </div>
 
         <div className="logout">
-          <Button className="btn">退出登录</Button>
+          <Button className="btn" onClick={onLogout}>
+            退出登录
+          </Button>
         </div>
       </div>
       <Popup visible={inputVisible.visible} position="right" destroyOnClose>
