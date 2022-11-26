@@ -8,6 +8,7 @@ import Question from '@/pages/question'
 import Video from '@/pages/video'
 import Profile from '@/pages/profile'
 import ProfileEdit from '@/pages/profile/Edit'
+import AuthRoute from '@/components/AuthRoute'
 const routes = [
   {
     path: '/',
@@ -27,13 +28,13 @@ const routes = [
       },
       {
         path: '/profile',
-        element: <Profile />,
+        element: <AuthRoute element={<Profile />} />,
       },
     ],
   },
   {
     path: '/profile/edit',
-    element: <ProfileEdit />,
+    element: <AuthRoute element={<ProfileEdit />} />,
   },
   {
     path: '/login',
