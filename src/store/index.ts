@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import login from './modules/login'
 import profile from './modules/profile'
+import home from './modules/home'
 
 const store = configureStore({
   reducer: {
     login,
     profile,
+    home,
   },
 })
 // redux相关类型

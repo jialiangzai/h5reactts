@@ -45,3 +45,11 @@ export type UserProfileResponse = ApiRes<UserProfile>
 export type UserPhotoResponse = ApiResponse<{
   photo: string
 }>
+export type Channel = {
+  id: number
+  name: string
+}
+export type UserChannel = {
+  channels: Channel[]
+}
+export type UserChannelResponse = ApiResponse<UserChannel>
